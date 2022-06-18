@@ -75,9 +75,9 @@ It's that easy. You can even leave out a property such as `Path` or `Method` (bu
 
 ## Roadmap
 
-- [ ] Setup Middleware
-- [ ] Request Handlers
-- [ ] Default Paths
+- [X] Setup Middleware
+- [X] Request Handlers
+- [X] Default Paths
 - [ ] Custom context and rendering
 
 ...and more that may come up in the future.
