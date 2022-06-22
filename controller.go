@@ -59,6 +59,7 @@ type Controller[Ctr CtrBase] struct {
 	ictr[Ctr]
 	routemap map[string]Route
 	ctr      Ctr
+	order    []string
 }
 
 func (c Controller[Ctr]) Setup(ctx *fiber.Ctx) {}
@@ -85,6 +86,7 @@ func (c *Controller[Ctr]) createRoutes(routes map[string]Route) {
 				t.Path = "/" + str.KebabCase().ToLower()
 			}
 			c.routemap[k] = t
+			c.order = append(c.order, k)
 		}
 	}
 
@@ -94,6 +96,7 @@ func (c *Controller[Ctr]) createRoutes(routes map[string]Route) {
 			t := r
 			t.Handler = m.Interface().(func(*fiber.Ctx) error)
 			c.routemap[k] = t
+			c.order = append(c.order, k)
 		}
 	}
 }
@@ -105,7 +108,8 @@ func (c *Controller[Ctr]) init(app fiber.Router, ctr Ctr) {
 		ctr.Setup(c)
 		return c.Next()
 	})
-	for _, v := range c.routemap {
+	for _, i := range c.order {
+		v := c.routemap[i]
 		app.Add(v.Method, v.Path, v.Handler)
 	}
 }
